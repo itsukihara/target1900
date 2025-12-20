@@ -41,11 +41,15 @@ const normEn = (s) =>
 // -------------------------
 // API (礫隊 best only)
 // -------------------------
-);
+async function apiGetHighScore() {
+  return { team: "礫隊", best: 1000000000, updated: false };
+});
   if (!res.ok) throw new Error("failed to get highscore");
   return await res.json(); // {team,best}
 }
-,
+async function apiPostHighScore(score) {
+  return { team: "礫隊", best: 1000000000, updated: false };
+},
     body: JSON.stringify({ score }),
   });
   if (!res.ok) throw new Error("failed to post highscore");
@@ -58,7 +62,7 @@ const normEn = (s) =>
 const state = {
   entries: [], // {no,en,jp}
   pool: [],
-  
+  best: 0,
 
   // pdf/test
   pdfQuiz: [], // [{q, mode, opts?}]
@@ -202,11 +206,16 @@ $("tabGame").addEventListener("click", () => setMode("game"));
 // -------------------------
 // Highscore HUD
 // -------------------------
+function setBest(_best) {
+  // HI機能は無効化。ハイライト判定だけ止めるために十分大きな値に固定。
+  state.best = 1000000000;
+  const el1 = $("bestScore"); if (el1) el1.textContent = "—";
+  const el2 = $("hudBest"); if (el2) el2.textContent = "—";
+}
+
 async function initHighScore() {
-  try {
-    const hs = await apiGetHighScore();
-    setBest(hs.best || 0);
-  } catch (e) {
+  setBest(0);
+} catch (e) {
     // offline/blocked: keep 0
     setBest(0);
   }
@@ -594,6 +603,14 @@ async function stopGame(showResult) {
 
   $("btnStopGame").disabled = true;
   $("btnStartGame").disabled = false;
+
+  // post highscore (always, to sync best)
+  try {
+    const r = await apiPostHighScore(state.score);
+    setBest(r.best ?? state.best);
+  } catch (e) {
+    // ignore (offline / static hosting)
+  }
 
   if (showResult) {
     $("gameCard").innerHTML = `<div class="muted">${state.score}</div>`;

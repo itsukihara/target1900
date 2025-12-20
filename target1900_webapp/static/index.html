@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>単語テスト / 練習 / ゲーム</title>
   <link rel="stylesheet" href="style.css" />
+<style>/* hide hi */ .topbest,.hudSide{display:none !important;}</style>
 </head>
 <body>
   <!-- print-only -->
@@ -13,7 +14,7 @@
   <div class="wrap no-print">
     <div class="topbar">
       <div class="title">単語テスト / 練習 / ゲーム</div>
-      <div class="topbest"> </div>
+      <div class="topbest"></div>
     </div>
 
     <div class="grid">
@@ -127,7 +128,7 @@
           <!-- Practice panel -->
           <div id="panelPractice" class="hidden">
             <div class="hud small">
-              <div class="hudSide"><span class="mono" id="pracProg">0/0</span></div>
+              <div class="hudSide"></div>
               <div class="hudCenter">MISS <span class="mono" id="pracMist">0</span></div>
               <div class="hudSide"></div>
             </div>
@@ -137,7 +138,7 @@
           <!-- Cards panel -->
           <div id="panelCards" class="hidden">
             <div class="hud small">
-              <div class="hudSide"><span class="mono" id="cardProg">0/0</span></div>
+              <div class="hudSide"></div>
               <div class="hudCenter"></div>
               <div class="hudSide right">
                 <button id="btnCloseCards" class="btn ghost" type="button">戻る</button>
@@ -155,12 +156,12 @@
           <!-- Game panel -->
           <div id="panelGame" class="hidden">
             <div class="hud">
-              <div class="hudSide"> <span id="hudBest" class="mono">0</span></div>
+              <div class="hudSide"></div>
               <div id="hudTime" class="hudTime mono">120.0</div>
               <div id="hudScore" class="hudScore mono">0</div>
             </div>
             <div class="hud small">
-              <div class="hudSide"><span class="mono" id="gameOk">0</span></div>
+              <div class="hudSide"></div>
               <div class="hudCenter"><span class="mono" id="gameStreak">0</span></div>
               <div class="hudSide right"><span class="mono" id="gameNg">0</span></div>
             </div>
