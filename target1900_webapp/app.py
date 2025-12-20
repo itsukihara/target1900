@@ -27,6 +27,12 @@ def _db() -> sqlite3.Connection:
     return conn
 
 
+@app.get("/api/ping")
+def ping():
+    return jsonify({"ok": True})
+
+
+
 @app.get("/api/highscore")
 def get_highscore():
     with _db() as conn:
@@ -50,10 +56,13 @@ def post_highscore():
     with _db() as conn:
         cur = conn.execute("SELECT best FROM highscores WHERE team=?", (TEAM_NAME,))
         row = cur.fetchone()
-        best = int(row[0]) if row else 0
+        old_best = int(row[0]) if row else 0
+        best = old_best
 
         # 更新されれば更新されたスコアのみ残す（＝過去最高より高い時だけ上書き）
-        if score_int > best:
+        updated = False
+        if score_int > old_best:
+            updated = True
             if row:
                 conn.execute("UPDATE highscores SET best=? WHERE team=?", (score_int, TEAM_NAME))
             else:
@@ -61,7 +70,7 @@ def post_highscore():
             best = score_int
         conn.commit()
 
-    return jsonify({"team": TEAM_NAME, "best": best})
+    return jsonify({"team": TEAM_NAME, "best": best, "updated": updated})
 
 
 @app.get("/")
