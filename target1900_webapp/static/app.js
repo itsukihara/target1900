@@ -41,15 +41,11 @@ const normEn = (s) =>
 // -------------------------
 // API (礫隊 best only)
 // -------------------------
-async function apiGetHighScore() {
-  const res = await fetch(`/api/highscore`, { cache: "no-store" });
+);
   if (!res.ok) throw new Error("failed to get highscore");
   return await res.json(); // {team,best}
 }
-async function apiPostHighScore(score) {
-  const res = await fetch(`/api/highscore`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
+,
     body: JSON.stringify({ score }),
   });
   if (!res.ok) throw new Error("failed to post highscore");
@@ -62,7 +58,7 @@ async function apiPostHighScore(score) {
 const state = {
   entries: [], // {no,en,jp}
   pool: [],
-  best: 0,
+  
 
   // pdf/test
   pdfQuiz: [], // [{q, mode, opts?}]
@@ -206,12 +202,6 @@ $("tabGame").addEventListener("click", () => setMode("game"));
 // -------------------------
 // Highscore HUD
 // -------------------------
-function setBest(best) {
-  state.best = Number(best || 0);
-  $("bestScore").textContent = state.best;
-  $("hudBest").textContent = state.best;
-}
-
 async function initHighScore() {
   try {
     const hs = await apiGetHighScore();
@@ -604,16 +594,6 @@ async function stopGame(showResult) {
 
   $("btnStopGame").disabled = true;
   $("btnStartGame").disabled = false;
-
-  // post highscore if improved
-  try {
-    if (state.score > state.best) {
-      const r = await apiPostHighScore(state.score);
-      setBest(r.best || state.best);
-    }
-  } catch (e) {
-    // ignore
-  }
 
   if (showResult) {
     $("gameCard").innerHTML = `<div class="muted">${state.score}</div>`;
